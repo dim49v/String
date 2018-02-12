@@ -85,10 +85,38 @@ String::~String()
 }
 
 bool String::operator<(const String& string){
-	return length_ < string.length_;
+	int minLength;
+	bool bl = false;
+	(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
+	int i = 0;
+	while ((string_[i] == string.string_[i]) && (i < minLength))
+		i++;
+	if (i < minLength){
+		if (string_[i] < string.string_[i])
+			bl = true;
+	}
+	else{
+		if (length_ < string.length_)
+			bl = true;
+	}
+	return bl;
 }
 bool String::operator<=(const String& string){
-	return length_ <= string.length_;
+	int minLength;
+	bool bl = false;
+	(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
+	int i = 0;
+	while ((string_[i] == string.string_[i]) && (i < minLength))
+		i++;
+	if (i < minLength){
+		if (string_[i] < string.string_[i])
+			bl = true;
+	}
+	else{
+		if (length_ <= string.length_)
+			bl = true;
+	}
+	return bl;
 }
 bool String::operator==(const String& string){
 	bool equal = true;
@@ -106,10 +134,38 @@ bool String::operator==(const String& string){
 	return equal;
 }
 bool String::operator>=(const String& string){
-	return length_ >= string.length_;
+	int minLength;
+	bool bl = false;
+	(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
+	int i = 0;
+	while ((string_[i] == string.string_[i]) && (i < minLength))
+		i++;
+	if (i < minLength){
+		if (string_[i] > string.string_[i])
+			bl = true;
+	}
+	else{
+		if (length_ >= string.length_)
+			bl = true;
+	}
+	return bl;
 }
 bool String::operator>(const String& string){
-	return length_ > string.length_;
+	int minLength;
+	bool bl = false;
+	(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
+	int i = 0;
+	while ((string_[i] == string.string_[i]) && (i < minLength))
+		i++;
+	if (i < minLength){
+		if (string_[i] > string.string_[i])
+			bl = true;
+	}
+	else{
+		if (length_ > string.length_)
+			bl = true;
+	}
+	return bl;
 }
 
 String String::operator=(const String& string){
