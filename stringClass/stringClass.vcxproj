@@ -82,6 +82,7 @@
     <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="String.h" />
   </ItemGroup>

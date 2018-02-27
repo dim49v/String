@@ -21,8 +21,6 @@ public:
 	String operator+(const String& string) const;
 
 	friend ostream &operator<<(ostream& out, const String& string);
-
-	void *operator new[](size_t size);
 	
 	int find(char ch) const;					//position first character(-1 if don't finded)
 	int find(const String& string) const;		//position first string(-1 if don't finded)
@@ -30,14 +28,15 @@ public:
 	char at(int index) const;
 	void swap(String& string);
 	void reverse();
-
+	int getMaxLength();
 
 private:
 	String(int length);
-	bool equalString(const String& string) const;
+	bool isEqualString(const String& string) const;
 	void maxLengthTest(int lenght) const;
-
+	int compare(const String& strng) const;
 	char* string_;
 	int length_;
-};
 
+	static int const MAX_LEGTH = 1000;
+};

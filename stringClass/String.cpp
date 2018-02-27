@@ -1,14 +1,14 @@
 #include "String.h"
+#include "Header.h"
 #include <iostream>
 using namespace std;
-int const MAX_LEGTH = 1000;
 
 String::String()
 {
 	length_ = 0;
 	string_ = new char[length_ + 1]{0};
 }
-String::String(const String& string){
+String::String(const String& string){	
  	length_ = string.length_;
 	string_ = new char[length_ + 1];
 	for (int i = 0; i <= length_; i++){
@@ -20,139 +20,48 @@ String::String(const char* string){
 		;
 	maxLengthTest(length_);
 	string_ = new char[length_ + 1];
-	for (int i = 0; i < length_; i++){
+	for (int i = 0; i  <=length_; i++){
 		string_[i] = string[i];
-	}
-	string_[length_] = 0;
+	} 
 }
 String::String(char ch, int length){
-	
-	try{
-		if (length > 0){
-			length_ = length;
-		}
-		else{
-			throw "Error. Length must be >0";
-		}
-		maxLengthTest(length_);
-		string_ = new char[length_ + 1];
-		for (int i = 0; i < length_; i++){
-			string_[i] = ch;
-		}
-		string_[length_] = 0;
+	if (length > 0){
+		length_ = length;
 	}
-	catch (char* err){
-		cout << err << endl;
-		system("pause");
-		exit(1);
+	else{
+		throw ArrLengthError("Error. Length must be >0", 1, MAX_LEGTH);
 	}
+	maxLengthTest(length_);
+	string_ = new char[length_ + 1];
+	for (int i = 0; i < length_; i++){
+		string_[i] = ch;
+	}
+	string_[length_] = 0;
 }
 
 String::~String()
 {
-	if (string_ != 0)
-		delete[] string_;
+	delete[] string_;
 }
 
 bool String::operator<(const String& string) const{
-	bool bl = false;
-	int minLength;
-	if (!equalString(string)){
-		(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
-		int i = 0;
-		while ((string_[i] == string.string_[i]) && (i < minLength))
-			i++;
-		if (i < minLength){
-			if (string_[i] < string.string_[i])
-				bl = true;
-		}
-		else{
-			if (length_ < string.length_)
-				bl = true;
-		}
-	}
-	return bl;
+	return (compare(string)==-1);
 }
 bool String::operator<=(const String& string) const{
-	int minLength;
-	bool bl = false;
-	if (!equalString(string)){
-		(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
-		int i = 0;
-		while ((string_[i] == string.string_[i]) && (i < minLength))
-			i++;
-		if (i < minLength){
-			if (string_[i] < string.string_[i])
-				bl = true;
-		}
-		else{
-			if (length_ <= string.length_)
-				bl = true;
-		}
-	}
-	else{
-		bl = true;
-	}
-	return bl;
+	return (compare(string) == -1) || (compare(string) == 0);
 }
 bool String::operator==(const String& string) const{
-	bool equal = true;
-	if (!equalString(string)){
-		if (length_ == string.length_){
-			for (int i = 0; i < length_; i++){
-				if (string_[i] != string.string_[i]){
-					equal = false;
-					break;
-				}
-			}
-		}
-		else{
-			equal = false;
-		}
-	}
-	return equal;
+	return (compare(string) == 0);
 }
 bool String::operator>=(const String& string) const{
-	int minLength;
-	bool bl = false;
-	if (!equalString(string)){
-		(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
-		int i = 0;
-		while ((string_[i] == string.string_[i]) && (i < minLength))
-			i++;
-		if (i < minLength){
-			if (string_[i] > string.string_[i])
-				bl = true;
-		}
-		else{
-			if (length_ >= string.length_)
-				bl = true;
-		}
-	}
-	return bl;
+	return (compare(string) == 1) || (compare(string) == 0);
 }
 bool String::operator>(const String& string) const{
-	int minLength;
-	bool bl = false;
-	if (!equalString(string)){
-		(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
-		int i = 0;
-		while ((string_[i] == string.string_[i]) && (i < minLength))
-			i++;
-		if (i < minLength){
-			if (string_[i] > string.string_[i])
-				bl = true;
-		}
-		else{
-			if (length_ > string.length_)
-				bl = true;
-		}
-	}
-	return bl;
+	return (compare(string) == 1);
 }
 
 String String::operator=(const String& string){
-	if (!equalString(string)){
+	if (!isEqualString(string)){
 		char* stringChar = new char[string.length_ + 1];
 		length_ = string.length_;
 		for (int i = 0; i <= length_; i++){
@@ -165,7 +74,7 @@ String String::operator=(const String& string){
 }
 String String::operator+(const String& string) const{
 	int newLength = length_ + string.length_;
-	maxLengthTest(newLength);
+	maxLengthTest(length_);
 	String newString(newLength);
 	int i;
 	for (i = 0; i < length_; i++){
@@ -185,22 +94,12 @@ ostream &operator<<(ostream& out, const String& string){
 	return out;
 }
 
-void *String::operator new[](size_t size){
-	void *p = malloc(size);
-	if (p == 0){
-		cout << "Error. Memory not allocated" << endl;
-		system("pause");
-		exit(1);
-	}
-	return p;
-}
 
 int String::find(char ch) const{
 	int n = -1;
-	for (int i = 0; i < length_; i++){
+	for (int i = 0; (i < length_) && (n==-1); i++){
 		if (string_[i] == ch){
 			n = i;
-			break;
 		}
 	}
 	return n;
@@ -209,17 +108,15 @@ int String::find(const String& string) const{
 	int n = -1;
 	bool findBool = false;
 	if (length_ >= string.length_){
-		for (int i = 0; i < length_ - string.length_ + 1; i++){
+		for (int i = 0; (i < length_ - string.length_ + 1) && (n==-1); i++){
 			if (string_[i] == string.string_[0]){
-				for (int u = 1; u < string.length_; u++){
+				for (int u = 1; (u < string.length_) && (!findBool); u++){
 					if (string_[i + u] != string.string_[u]){
 						findBool = true;
-						break;
 					}
 				}
 				if (!findBool){
 					n = i;
-					break;
 				}
 				findBool = false;
 			}
@@ -233,25 +130,18 @@ int String::getLength() const{
 }
 
 char String::at(int index) const{
-	try{
-		if (index < 0){
-			throw "Error. Index must be >=0";
-		}
-		if (index>length_){
-			throw "Error. Index must be < length-1";
-		}
+	if (index < 0){
+		throw IndexError("Error. Index must be >=0", 0, length_);
 	}
-	catch (char* err){
-		cout << err << endl;
-		system("pause");
-		exit(1);
+	if (index > length_){
+		throw IndexError("Error. Index must be >=0", 0, length_);
 	}
 	return string_[index];
 }
 
 void String::swap(String& string){
-	if (equalString(string)){
-		cout << "Swap one and the same object" << endl;
+	if (isEqualString(string)){
+		SameObjectError("Swap one and the same object");
 	}
 	else{
 		char* ch;
@@ -274,19 +164,58 @@ void String::reverse(){
 	}
 }
 
+int String::getMaxLength(){
+	return MAX_LEGTH;
+}
 
 String::String(int length){
 	length_ = length;
 	string_ = new char[length_ + 1];
 }
 
-bool String::equalString(const String& string) const{
-	return(string_ == string.string_);
+bool String::isEqualString(const String& string) const{
+	return(this == &string);
 }
 void String::maxLengthTest(int length) const{
 	if (length > MAX_LEGTH){
-		cout << "Error. String length must be <=1000" << endl;
-		system("pause");
-		exit(1);
+		throw ArrLengthError("Error. String length must be <=1000", 1, MAX_LEGTH);
 	}
+}
+int String::compare(const String& string) const{
+	int temp;
+	int minLength;
+	temp = 0;
+	if (!isEqualString(string)){
+		(length_ < string.length_) ? minLength = length_ : minLength = string.length_;
+		int i = 0;
+		while ((string_[i] == string.string_[i]) && (i < minLength))
+			i++;
+		if (i < minLength){
+			if (string_[i] < string.string_[i])
+				temp = -1;
+			else
+				temp = 1;
+		}
+		else{
+			if (length_ < string.length_)
+				temp = -1;
+			if (length_ > string.length_)
+				temp = 1;
+			if (length_ == string.length_)
+				temp = 1;
+		}
+	}
+	return temp;
+}
+
+void *operator new[](size_t size){
+	void *p = malloc(size);
+	if (p == 0){
+		throw MemoryError("Error. Memory not allocated");
+	}
+	return p;
+}
+void operator delete[](void *p){
+	if (p!=0)
+		free(p);
 }
